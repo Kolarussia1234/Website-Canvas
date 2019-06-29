@@ -1,0 +1,59 @@
+<input type="file" accept="image/*" id="file-input">
+<script>
+  const fileInput = document.getElementById('file-input');
+
+  fileInput.addEventListener('change', (e) => doSomethingWithFiles(e.target.files));
+</script>
+
+<div id="target">You can drag an image file here</div>
+<script>
+  const target = document.getElementById('target');
+
+  target.addEventListener('drop', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    doSomethingWithFiles(e.dataTransfer.files);
+  });
+
+  target.addEventListener('dragover', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    e.dataTransfer.dropEffect = 'copy';
+  });
+</script>
+
+
+
+<textarea id="target">Paste an image here</textarea>
+<script>
+  const target = document.getElementById('target');
+
+  target.addEventListener('paste', (e) => {
+    e.preventDefault();
+    doSomethingWithFiles(e.clipboardData.files);
+  });
+</script>
+
+
+
+<img id="output">
+<script>
+  const output = document.getElementById('output');
+
+  function doSomethingWithFiles(fileList) {
+    let file = null;
+
+    for (let i = 0; i < fileList.length; i++) {
+      if (fileList[i].type.match(/^image\//)) {
+        file = fileList[i];
+        break;
+      }
+    }
+
+    if (file !== null) {
+      output.src = URL.createObjectURL(file);
+    }
+  }
+</script>
